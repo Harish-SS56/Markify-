@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Checker System</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --bg-soft: #111733;
+            --card: #0f1730;
+            --primary: #6c8cff;
+            --primary-600: #5a79ff;
+            --primary-700: #4b68ff;
+            --success: #46d26f;
+            --danger: #ff5c77;
+            --warning: #ffc54d;
+            --text: #e6ecff;
+            --muted: #9fb0d6;
+            --border: #233059;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.02);
+        }
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            background: radial-gradient(1200px 600px at 20% -10%, rgba(108,140,255,0.15), transparent 60%),
+                        radial-gradient(1000px 600px at 110% 10%, rgba(255,92,119,0.12), transparent 60%),
+                        var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+        }
+        .header {
+            text-align: center;
+            background: linear-gradient(160deg, rgba(108,140,255,0.22), rgba(79,70,229,0.18));
+            color: var(--text);
+            padding: 32px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(6px);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.4em;
+            letter-spacing: 0.3px;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            color: var(--muted);
+        }
+        .container {
+            background: linear-gradient(180deg, rgba(17,23,51,0.8), rgba(11,16,32,0.9));
+            padding: 26px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--card);
+            box-shadow: var(--shadow);
+        }
+        .section h2 {
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--text);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background: var(--bg-soft);
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        /* Improve dropdown readability */
+        select#paper_id {
+            font-size: 16px;
+            padding: 14px 12px;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108,140,255,0.25);
+        }
+        button {
+            background: linear-gradient(180deg, var(--primary-600), var(--primary-700));
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: transform 0.08s ease, filter 0.2s ease;
+            box-shadow: 0 6px 20px rgba(108,140,255,0.28);
+        }
+        button:hover {
+            filter: brightness(1.05);
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        button.secondary {
+            background: linear-gradient(180deg, #2a344f, #232e49);
+            box-shadow: 0 6px 20px rgba(35,46,73,0.35);
+        }
+        button.secondary:hover {
+            filter: brightness(1.05);
+        }
+        button.danger {
+            background: linear-gradient(180deg, #ff6b7f, #ff5c77);
+            box-shadow: 0 6px 20px rgba(255,92,119,0.35);
+        }
+        button.danger:hover {
+            filter: brightness(1.05);
+        }
+        button.success {
+            background: linear-gradient(180deg, #47e189, #46d26f);
+            box-shadow: 0 6px 20px rgba(70,210,111,0.35);
+        }
+        button.success:hover {
+            filter: brightness(1.05);
+        }
+        .success {
+            color: #d8ffe8;
+            background: linear-gradient(180deg, rgba(70,210,111,0.12), rgba(70,210,111,0.08));
+            border: 1px solid rgba(70,210,111,0.35);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .error {
+            color: #ffdee4;
+            background: linear-gradient(180deg, rgba(255,92,119,0.16), rgba(255,92,119,0.10));
+            border: 1px solid rgba(255,92,119,0.35);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .info {
+            color: #dcecff;
+            background: linear-gradient(180deg, rgba(108,140,255,0.14), rgba(108,140,255,0.08));
+            border: 1px solid rgba(108,140,255,0.35);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--bg-soft);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tab:hover {
+            background: rgba(108,140,255,0.08);
+        }
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            background: rgba(108,140,255,0.08);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .paper-list {
+            margin-top: 20px;
+        }
+        .paper-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .paper-info h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        .paper-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .result-card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: var(--card);
+            box-shadow: var(--shadow);
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .score {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .percentage {
+            font-size: 20px;
+            color: #28a745;
+            font-weight: bold;
+        }
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .question-item {
+            padding: 12px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        /* --- START OF CORRECTED CSS --- */
+        .question-correct {
+            background-color: var(--success);
+            color: var(--bg-soft);
+            border: 1px solid var(--success);
+        }
+        .question-partial {
+            background-color: #ff9800;
+            color: var(--bg-soft);
+            border: 1px solid #ff9800;
+        }
+        .question-incorrect {
+            background-color: var(--danger);
+            color: var(--bg-soft);
+            border: 1px solid var(--danger);
+        }
+        .question-not-answered {
+            background-color: var(--warning);
+            color: var(--bg-soft);
+            border: 1px solid var(--warning);
+        }
+        /* --- END OF CORRECTED CSS --- */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .analytics-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .analytics-card h4 {
+            margin-top: 0;
+            color: var(--text);
+            font-size: 16px;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        .grade-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .grade-label {
+            width: 120px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .grade-count {
+            margin-left: 10px;
+            color: #666;
+            font-weight: bold;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--muted);
+        }
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .confirmation-popup {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .extracted-info {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+        }
+        .extracted-info p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+        .confirmation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .confirmation-buttons button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .confirmation-buttons .primary {
+            background: var(--primary);
+            color: white;
+        }
+        .confirmation-buttons .primary:hover {
+            background: var(--primary-dark);
+        }
+        .confirmation-buttons .secondary {
+            background: var(--muted);
+            color: var(--text);
+        }
+        .confirmation-buttons .secondary:hover {
+            background: var(--error);
+            color: white;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-processing {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .header h1 {
+                font-size: 2em;
+            }
+            .container {
+                padding: 20px;
+            }
+            .section {
+                padding: 15px;
+            }
+            .tabs {
+                flex-direction: column;
+            }
+            .tab {
+                text-align: center;
+            }
+            .result-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .question-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Multi-image upload styles */
+        .image-preview-container {
+            margin-top: 15px;
+            padding: 15px;
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        
+        .image-preview-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .image-preview-item {
+            position: relative;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .image-preview-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .image-preview-item .image-info {
+            padding: 8px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            background: #f8f9fa;
+        }
+        
+        .image-preview-item .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-preview-item .remove-image:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Markify</h1>
+        <p>AI-powered OCR solution for automated answer sheet evaluation using Gemini 2.5 Flash</p>
+    </div>
+    
+    <div class="container">
+        <div class="section">
+            <h2>📝 Teacher Section - Upload Answer Key</h2>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('ocr-upload')">OCR Upload</div>
+                <div class="tab" onclick="switchTab('manual-input')">Manual Input</div>
+                <div class="tab" onclick="switchTab('manage-papers')">Manage Papers</div>
+            </div>
+            
+            <div id="ocr-upload" class="tab-content active">
+                <div class="info">
+                    <strong>OCR Upload:</strong> Upload an image of your answer key and let AI extract the correct answers automatically.
+                    Supports JPG, PNG, and other common image formats.
+                </div>
+                <form id="teacherForm">
+                    <div class="form-group">
+                        <label for="paperName">Question Paper Name:</label>
+                        <input type="text" id="paperName" name="paperName" placeholder="e.g., Mathematics Final Exam 2024" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalQuestions">Total Questions:</label>
+                        <input type="number" id="totalQuestions" name="totalQuestions" min="1" max="200" placeholder="e.g., 50" required>
+                        <div class="help-text">Enter the total number of questions in the paper (1-200)</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="answerKeyImage">Upload Answer Key Image:</label>
+                        <input type="file" id="answerKeyImage" name="answerKeyImage" accept="image/*" required>
+                        <div class="help-text">Upload a clear image of the answer key with marked correct options</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Or use your camera:</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                            <button type="button" id="startCameraBtn" class="secondary">📷 Start Camera</button>
+                            <button type="button" id="captureBtn" style="display:none;">📸 Capture Photo</button>
+                            <button type="button" id="retakeBtn" class="secondary" style="display:none;">🔁 Retake</button>
+                            <button type="button" id="stopCameraBtn" class="secondary" style="display:none;">🛑 Stop Camera</button>
+                        </div>
+                        <div class="help-text">Use rear camera for best results. After capture, the photo will be attached automatically.</div>
+                        <div style="margin-top: 10px;">
+                            <video id="cameraPreview" autoplay playsinline style="width: 100%; max-height: 320px; display: none; border-radius: 8px; background: #000;"></video>
+                            <img id="capturedPreview" alt="Captured preview" style="width: 100%; max-height: 320px; display: none; border-radius: 8px;" />
+                            <canvas id="captureCanvas" style="display:none;"></canvas>
+                        </div>
+                    </div>
+                    <button type="submit" id="uploadBtn">Upload Answer Key</button>
+                </form>
+                <div id="teacherResult"></div>
+            </div>
+            
+            <div id="manual-input" class="tab-content">
+                <div class="info">
+                    <strong>Manual Input:</strong> Enter the correct answers manually if you don't have an image or prefer direct input.
+                </div>
+                <form id="manualForm">
+                    <div class="form-group">
+                        <label for="manualPaperName">Question Paper Name:</label>
+                        <input type="text" id="manualPaperName" name="manualPaperName" placeholder="e.g., Physics Quiz 2024" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="manualTotalQuestions">Total Questions:</label>
+                        <input type="number" id="manualTotalQuestions" name="manualTotalQuestions" min="1" max="200" placeholder="e.g., 25" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Answer Key (Format: Question Number - Correct Option(s)):</label>
+                        <textarea id="manualAnswers" rows="10" placeholder="Example:&#10;1-A&#10;2-B,C&#10;3-A,B,D&#10;4-D&#10;5-A&#10;..."></textarea>
+                        <div class="help-text">
+                            <strong>Single Answer:</strong> QuestionNumber-Option (e.g., 1-A, 2-B)<br>
+                            <strong>Multiple Answers:</strong> QuestionNumber-Option1,Option2,Option3 (e.g., 2-A,C, 3-B,D)<br>
+                            <strong>Partial Marking System:</strong><br>
+                            • <strong>Full Marks:</strong> Select ALL correct options and NO wrong options<br>
+                            • <strong>Partial Marks:</strong> Select ONLY correct options (but not all) - proportional marks awarded<br>
+                            • <strong>Zero Marks:</strong> Select ANY wrong option - no marks awarded
+                        </div>
+                    </div>
+                    <button type="submit">Create Answer Key</button>
+                </form>
+                <div id="manualResult"></div>
+            </div>
+            
+            <div id="manage-papers" class="tab-content">
+                <div class="info">
+                    <strong>Manage Papers:</strong> View, edit, or delete existing question papers and their answer keys.
+                </div>
+                <button onclick="loadQuestionPapers()" class="secondary">🔄 Refresh Papers</button>
+                <div id="papersList" class="paper-list"></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎓 Student Section - Upload Answer Sheet</h2>
+            <div class="info">
+                <strong>For Teachers:</strong> Select the question paper and upload a clear image of the student's answer sheet.
+                The AI will automatically extract roll number, section, and answers from the sheet.
+            </div>
+            <form id="studentForm">
+                <div class="form-group">
+                    <label for="paper_id">Select Question Paper:</label>
+                    <select id="paper_id" name="paper_id" required>
+                        <option value="">-- Select Paper --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="studentName">Student Name (Optional):</label>
+                    <input type="text" id="studentName" name="studentName" placeholder="e.g., John Doe">
+                    <div class="help-text">Optional: Enter student name if known</div>
+                </div>
+                <div class="form-group">
+                    <label for="answerSheetImages">Upload Answer Sheet Images:</label>
+                    <input type="file" id="answerSheetImages" name="answerSheetImages" accept="image/*" multiple required>
+                    <div class="help-text">
+                        <strong>📸 Multiple Images Supported!</strong><br>
+                        • Upload multiple pages of your answer sheet<br>
+                        • Select multiple images at once (Ctrl+Click or Cmd+Click)<br>
+                        • All images will be processed and combined for final results<br>
+                        • Supported formats: JPG, PNG, WEBP
+                    </div>
+                    <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
+                        <h4>📋 Selected Images:</h4>
+                        <div id="imagePreviewList" class="image-preview-list"></div>
+                        <button type="button" id="clearImages" class="secondary" style="margin-top: 10px;">🗑️ Clear All Images</button>
+                    </div>
+                </div>
+                <button type="submit" id="submitBtn">Submit Answer Sheet</button>
+            </form>
+            <div id="studentResult"></div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Results Section</h2>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="switchResultTab('search-results')">Search Results</div>
+                <div class="tab" onclick="switchResultTab('analytics')">Analytics</div>
+                <div class="tab" onclick="switchResultTab('all-submissions')">All Submissions</div>
+                <div class="tab" onclick="switchResultTab('export-results')">📊 Export Results</div>
+            </div>
+            
+            <div id="search-results" class="tab-content active">
+                <div class="info">
+                    <strong>Search Results:</strong> Enter a roll number to view detailed results for that student.
+                </div>
+                <form id="resultsForm">
+                    <div class="form-group">
+                        <label for="searchRoll">Search by Roll Number:</label>
+                        <input type="text" id="searchRoll" name="searchRoll" placeholder="e.g., 2024001" required>
+                        <div class="help-text">Enter the student's roll number to view their results</div>
+                    </div>
+                    <button type="submit">🔍 Get Results</button>
+                </form>
+                <div id="resultsDisplay"></div>
+            </div>
+            
+            <div id="analytics" class="tab-content">
+                <div class="info">
+                    <strong>Analytics:</strong> View overall system statistics, performance metrics, and grade distributions.
+                </div>
+                <button onclick="loadAnalytics()" class="success">📈 Load Analytics</button>
+                <div id="analyticsDisplay"></div>
+            </div>
+            
+            <div id="all-submissions" class="tab-content">
+                <div class="info">
+                    <strong>All Submissions:</strong> View a complete list of all student submissions across all papers.
+                </div>
+                <button onclick="loadAllSubmissions()" class="secondary">📋 Load All Submissions</button>
+                <div id="submissionsDisplay"></div>
+            </div>
+            
+            <div id="export-results" class="tab-content">
+                <div class="info">
+                    <strong>Export Results:</strong> Select a paper to export all student results to Excel format. The export includes roll numbers, names, marks, and grades with automatic duplicate handling.
+                </div>
+                <form id="exportForm">
+                    <div class="form-group">
+                        <label for="exportPaperId">Select Paper to Export:</label>
+                        <select id="exportPaperId" name="exportPaperId" required>
+                            <option value="">-- Select Paper --</option>
+                        </select>
+                        <div class="help-text">Choose the paper whose results you want to export to Excel</div>
+                    </div>
+                    <button type="submit" class="success">📊 Export to Excel</button>
+                </form>
+                <div id="exportResult"></div>
+                <div id="exportPreview"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API base URL
+        const API_BASE = '/api';
+        let teacherCameraStream = null;
+        let capturedAnswerKeyBlob = null;
+        let studentCameraStream = null;
+        let capturedStudentSheetBlob = null;
+        
+        // Polyfill-safe camera request
+        async function requestCameraStream(constraints) {
+            try {
+                if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+                    return await navigator.mediaDevices.getUserMedia(constraints);
+                }
+            } catch (e) {
+                // fallthrough to legacy
+            }
+            const legacyGetUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+            if (legacyGetUserMedia) {
+                return await new Promise((resolve, reject) => {
+                    try {
+                        legacyGetUserMedia.call(navigator, constraints, resolve, reject);
+                    } catch (err) {
+                        reject(err);
+                    }
+                });
+            }
+            throw new Error('Camera API not available in this browser or context. Use HTTPS or file upload.');
+        }
+
+        // Load question papers on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuestionPapers();
+            
+            // Add form validation
+            addFormValidation();
+            
+            // Load papers into the student dropdown
+            const dropdown = document.getElementById("paper_id");
+            fetch("/api/papers")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.papers && data.papers.length > 0) {
+                        refreshStudentPaperDropdown(data.papers);
+                        refreshExportPaperDropdown(data.papers);
+                    } else {
+                        const option = document.createElement("option");
+                        option.disabled = true;
+                        option.textContent = "No papers available";
+                        dropdown.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching papers:", error);
+                    const option = document.createElement("option");
+                    option.disabled = true;
+                    option.textContent = "Error loading papers";
+                    dropdown.appendChild(option);
+                });
+        });
+        
+        function addFormValidation() {
+            // Add real-time validation feedback
+            const inputs = document.querySelectorAll('input[required], select[required], textarea[required]');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (!this.value.trim()) {
+                        this.style.borderColor = '#dc3545';
+                    } else {
+                        this.style.borderColor = '#28a745';
+                    }
+                });
+                
+                input.addEventListener('input', function() {
+                    if (this.value.trim()) {
+                        this.style.borderColor = '#28a745';
+                    }
+                });
+            });
+        }
+        
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        function switchResultTab(tabName) {
+            // Hide all result tab contents
+            document.querySelectorAll('#search-results, #analytics, #all-submissions, #export-results').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from result tabs
+            document.querySelectorAll('.section:last-child .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        // Helper: refresh student dropdown with a list of papers
+        function refreshStudentPaperDropdown(papers) {
+            const dropdown = document.getElementById('paper_id');
+            dropdown.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = '-- Select Paper --';
+            dropdown.appendChild(placeholder);
+            papers.forEach(paper => {
+                const option = document.createElement('option');
+                option.value = paper.id;
+                option.textContent = `${paper.paper_name} (${paper.answer_count ?? paper.total_questions ?? ''} ${paper.answer_count !== undefined ? 'answers' : 'questions'})`;
+                dropdown.appendChild(option);
+            });
+        }
+
+        // Helper: refresh export dropdown with a list of papers
+        function refreshExportPaperDropdown(papers) {
+            const dropdown = document.getElementById('exportPaperId');
+            if (!dropdown) return;
+            
+            dropdown.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = '-- Select Paper --';
+            dropdown.appendChild(placeholder);
+            
+            papers.forEach(paper => {
+                const option = document.createElement('option');
+                option.value = paper.id;
+                option.textContent = `${paper.paper_name} (${paper.total_questions} questions)`;
+                dropdown.appendChild(option);
+            });
+        }
+
+        // Helper: set dropdown to ONLY the given paper (after creation)
+        function setStudentDropdownToPaper(paperId, paperName, totalQuestionsOrAnswers) {
+            const dropdown = document.getElementById('paper_id');
+            dropdown.innerHTML = '';
+            const option = document.createElement('option');
+            option.value = paperId;
+            const suffix = totalQuestionsOrAnswers ? ` (${totalQuestionsOrAnswers} questions)` : '';
+            option.textContent = `${paperName}${suffix}`;
+            dropdown.appendChild(option);
+            dropdown.value = paperId;
+        }
+
+        // Load available question papers
+        async function loadQuestionPapers() {
+            try {
+                const response = await fetch(`${API_BASE}/papers`);
+                const data = await response.json();
+                
+                // Update papers list
+                const papersList = document.getElementById('papersList');
+                const papers = (data && data.papers) ? data.papers : [];
+                if (papers.length === 0) {
+                    papersList.innerHTML = '<div class="info">No question papers found. Upload your first answer key to get started!</div>';
+                } else {
+                    papersList.innerHTML = papers.map(paper => `
+                        <div class="paper-item">
+                            <div class="paper-info">
+                                <h4>${paper.paper_name}</h4>
+                                <p>${paper.total_questions} questions • Created: ${new Date(paper.created_at).toLocaleDateString()}</p>
+                            </div>
+                            <div>
+                                <button onclick="viewPaperAnswers(${paper.id})" class="secondary">👁️ View Answers</button>
+                                <button onclick="deletePaper(${paper.id}, '${paper.paper_name.replace(/'/g, "\\'")}')" class="danger">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                
+            } catch (error) {
+                console.error('Error loading papers:', error);
+                document.getElementById('papersList').innerHTML = '<div class="error">Failed to load question papers. Please try again.</div>';
+            }
+        }
+        
+        // Teacher OCR form submission
+        document.getElementById('teacherForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('answerKeyImage');
+            const resultDiv = document.getElementById('teacherResult');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            if (!capturedAnswerKeyBlob && !(fileInput.files && fileInput.files[0])) {
+                resultDiv.innerHTML = '<div class="error"><strong>❌ Error:</strong> Please choose a file or capture a photo.</div>';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('paper_name', document.getElementById('paperName').value);
+            formData.append('total_questions', document.getElementById('totalQuestions').value);
+            if (capturedAnswerKeyBlob) {
+                const fileFromBlob = new File([capturedAnswerKeyBlob], 'answer-key.jpg', { type: capturedAnswerKeyBlob.type || 'image/jpeg' });
+                formData.append('image', fileFromBlob);
+            } else if (fileInput.files && fileInput.files[0]) {
+                formData.append('image', fileInput.files[0]);
+            }
+            
+            // Show loading state
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Processing...';
+            resultDiv.innerHTML = '<div class="loading">Processing answer key with AI OCR</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/upload-answer-key`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Success!</strong> ${result.message}<br>
+                            <strong>Paper ID:</strong> ${result.paper_id}<br>
+                            <strong>Extracted Answers:</strong> ${result.extracted_answers}
+                        </div>
+                    `;
+                    // Immediately set student dropdown to this new paper only
+                    const paperName = document.getElementById('paperName').value;
+                    setStudentDropdownToPaper(result.paper_id, paperName, result.total_questions);
+                    loadQuestionPapers(); // Refresh Manage Papers list
+                    document.getElementById('teacherForm').reset();
+                    capturedAnswerKeyBlob = null;
+                    // Reset previews
+                    const imgPrev = document.getElementById('capturedPreview');
+                    imgPrev.style.display = 'none';
+                    imgPrev.src = '';
+                    // Stop camera if active
+                    stopTeacherCamera();
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${result.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${error.message}</div>`;
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Upload Answer Key';
+            }
+        });
+
+        // Camera controls for Teacher OCR
+        const startCameraBtn = document.getElementById('startCameraBtn');
+        const captureBtn = document.getElementById('captureBtn');
+        const retakeBtn = document.getElementById('retakeBtn');
+        const stopCameraBtn = document.getElementById('stopCameraBtn');
+        const videoEl = document.getElementById('cameraPreview');
+        const canvasEl = document.getElementById('captureCanvas');
+        const capturedImgEl = document.getElementById('capturedPreview');
+
+        async function startTeacherCamera() {
+            try {
+                teacherCameraStream = await requestCameraStream({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+                videoEl.srcObject = teacherCameraStream;
+                videoEl.style.display = 'block';
+                captureBtn.style.display = 'inline-block';
+                stopCameraBtn.style.display = 'inline-block';
+                startCameraBtn.style.display = 'none';
+                retakeBtn.style.display = 'none';
+                capturedImgEl.style.display = 'none';
+                // Disable file input while camera mode is active to avoid confusion
+                const fi = document.getElementById('answerKeyImage');
+                if (fi) { fi.disabled = true; fi.style.opacity = '0.6'; }
+            } catch (err) {
+                // Fallback: prompt file picker with camera hint if possible
+                const fi = document.getElementById('answerKeyImage');
+                if (fi) {
+                    try {
+                        fi.setAttribute('capture', 'environment');
+                        fi.click();
+                        // Remove capture immediately so future clicks open gallery
+                        setTimeout(() => { try { fi.removeAttribute('capture'); } catch (_) {} }, 0);
+                    } catch (_) {}
+                }
+                alert('Unable to access camera: ' + (err && err.message ? err.message : err));
+            }
+        }
+
+        function stopTeacherCamera() {
+            if (teacherCameraStream) {
+                teacherCameraStream.getTracks().forEach(t => t.stop());
+                teacherCameraStream = null;
+            }
+            videoEl.srcObject = null;
+            videoEl.style.display = 'none';
+            captureBtn.style.display = 'none';
+            stopCameraBtn.style.display = 'none';
+            startCameraBtn.style.display = 'inline-block';
+            // Re-enable file input and ensure capture hint is cleared
+            const fi = document.getElementById('answerKeyImage');
+            if (fi) { fi.disabled = false; fi.style.opacity = '1'; try { fi.removeAttribute('capture'); } catch (_) {} }
+        }
+
+        function captureTeacherPhoto() {
+            const videoWidth = videoEl.videoWidth || 1280;
+            const videoHeight = videoEl.videoHeight || 720;
+            canvasEl.width = videoWidth;
+            canvasEl.height = videoHeight;
+            const ctx = canvasEl.getContext('2d');
+            ctx.drawImage(videoEl, 0, 0, videoWidth, videoHeight);
+            canvasEl.toBlob((blob) => {
+                if (!blob) return;
+                capturedAnswerKeyBlob = blob;
+                // Show preview
+                const url = URL.createObjectURL(blob);
+                capturedImgEl.src = url;
+                capturedImgEl.style.display = 'block';
+                // Hide video if we want after capture
+                videoEl.style.display = 'none';
+                captureBtn.style.display = 'none';
+                retakeBtn.style.display = 'inline-block';
+                // Remove required from file input since we have a capture
+                const fi = document.getElementById('answerKeyImage');
+                if (fi) fi.required = false;
+            }, 'image/jpeg', 0.92);
+        }
+
+        function retakeTeacherPhoto() {
+            capturedAnswerKeyBlob = null;
+            capturedImgEl.style.display = 'none';
+            capturedImgEl.src = '';
+            if (!teacherCameraStream) {
+                startTeacherCamera();
+                return;
+            }
+            videoEl.style.display = 'block';
+            captureBtn.style.display = 'inline-block';
+            retakeBtn.style.display = 'none';
+            // Require file again until we capture
+            const fi = document.getElementById('answerKeyImage');
+            if (fi) fi.required = true;
+        }
+
+        startCameraBtn?.addEventListener('click', startTeacherCamera);
+        stopCameraBtn?.addEventListener('click', stopTeacherCamera);
+        captureBtn?.addEventListener('click', captureTeacherPhoto);
+        retakeBtn?.addEventListener('click', retakeTeacherPhoto);
+
+        // =============================
+        // Student Camera UI and Logic
+        // =============================
+        // Insert camera controls below student file input
+        (function initStudentCameraUI() {
+            const studentGroup = document.getElementById('answerSheetImage')?.parentElement;
+            if (!studentGroup) return;
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.flexWrap = 'wrap';
+            row.style.gap = '10px';
+            row.style.alignItems = 'center';
+            row.innerHTML = `
+                <button type="button" id="studentStartCameraBtn" class="secondary">📷 Start Camera</button>
+                <button type="button" id="studentCaptureBtn" style="display:none;">📸 Capture Photo</button>
+                <button type="button" id="studentRetakeBtn" class="secondary" style="display:none;">🔁 Retake</button>
+                <button type="button" id="studentStopCameraBtn" class="secondary" style="display:none;">🛑 Stop Camera</button>
+            `;
+            const help = document.createElement('div');
+            help.className = 'help-text';
+            help.textContent = 'Or use your camera. After capture, the photo will be attached automatically.';
+            const video = document.createElement('video');
+            video.id = 'studentCameraPreview';
+            video.autoplay = true;
+            video.playsInline = true;
+            video.style.cssText = 'width:100%;max-height:320px;display:none;border-radius:8px;background:#000;margin-top:10px;';
+            const img = document.createElement('img');
+            img.id = 'studentCapturedPreview';
+            img.alt = 'Captured preview';
+            img.style.cssText = 'width:100%;max-height:320px;display:none;border-radius:8px;margin-top:10px;';
+            const canvas = document.createElement('canvas');
+            canvas.id = 'studentCaptureCanvas';
+            canvas.style.display = 'none';
+            studentGroup.appendChild(row);
+            studentGroup.appendChild(help);
+            studentGroup.appendChild(video);
+            studentGroup.appendChild(img);
+            studentGroup.appendChild(canvas);
+
+            const startBtn = document.getElementById('studentStartCameraBtn');
+            const capBtn = document.getElementById('studentCaptureBtn');
+            const retBtn = document.getElementById('studentRetakeBtn');
+            const stopBtn = document.getElementById('studentStopCameraBtn');
+            const vid = document.getElementById('studentCameraPreview');
+            const cvs = document.getElementById('studentCaptureCanvas');
+            const imgPrev = document.getElementById('studentCapturedPreview');
+
+            async function startStudentCamera() {
+                try {
+                    studentCameraStream = await requestCameraStream({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+                    vid.srcObject = studentCameraStream;
+                    vid.style.display = 'block';
+                    capBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'inline-block';
+                    startBtn.style.display = 'none';
+                    retBtn.style.display = 'none';
+                    imgPrev.style.display = 'none';
+                    // Disable file input while camera mode is active
+                    const sfi = document.getElementById('answerSheetImage');
+                    if (sfi) { sfi.disabled = true; sfi.style.opacity = '0.6'; }
+                } catch (err) {
+                    // Fallback: open file picker with camera hint if possible
+                    const sfi = document.getElementById('answerSheetImage');
+                    if (sfi) {
+                        try {
+                            sfi.setAttribute('capture', 'environment');
+                            sfi.click();
+                            // Remove capture immediately so future clicks open gallery
+                            setTimeout(() => { try { sfi.removeAttribute('capture'); } catch (_) {} }, 0);
+                        } catch (_) {}
+                    }
+                    alert('Unable to access camera: ' + (err && err.message ? err.message : err));
+                }
+            }
+
+            function stopStudentCamera() {
+                if (studentCameraStream) {
+                    studentCameraStream.getTracks().forEach(t => t.stop());
+                    studentCameraStream = null;
+                }
+                vid.srcObject = null;
+                vid.style.display = 'none';
+                capBtn.style.display = 'none';
+                stopBtn.style.display = 'none';
+                startBtn.style.display = 'inline-block';
+                // Re-enable file input and clear capture hint
+                const sfi = document.getElementById('answerSheetImage');
+                if (sfi) { sfi.disabled = false; sfi.style.opacity = '1'; try { sfi.removeAttribute('capture'); } catch (_) {} }
+            }
+
+            function captureStudentPhoto() {
+                const vw = vid.videoWidth || 1280;
+                const vh = vid.videoHeight || 720;
+                cvs.width = vw;
+                cvs.height = vh;
+                const ctx = cvs.getContext('2d');
+                ctx.drawImage(vid, 0, 0, vw, vh);
+                cvs.toBlob((blob) => {
+                    if (!blob) return;
+                    capturedStudentSheetBlob = blob;
+                    const url = URL.createObjectURL(blob);
+                    imgPrev.src = url;
+                    imgPrev.style.display = 'block';
+                    vid.style.display = 'none';
+                    capBtn.style.display = 'none';
+                    retBtn.style.display = 'inline-block';
+                    // Not required to choose file now
+                    const sfi = document.getElementById('answerSheetImage');
+                    if (sfi) sfi.required = false;
+                }, 'image/jpeg', 0.92);
+            }
+
+            function retakeStudentPhoto() {
+                capturedStudentSheetBlob = null;
+                imgPrev.style.display = 'none';
+                imgPrev.src = '';
+                if (!studentCameraStream) {
+                    startStudentCamera();
+                    return;
+                }
+                vid.style.display = 'block';
+                capBtn.style.display = 'inline-block';
+                retBtn.style.display = 'none';
+                const sfi = document.getElementById('answerSheetImage');
+                if (sfi) sfi.required = true;
+            }
+
+            startBtn.addEventListener('click', startStudentCamera);
+            stopBtn.addEventListener('click', stopStudentCamera);
+            capBtn.addEventListener('click', captureStudentPhoto);
+            retBtn.addEventListener('click', retakeStudentPhoto);
+
+            // Expose stop for cleanup after submit
+            window.__stopStudentCamera = stopStudentCamera;
+        })();
+        
+        // Manual answer key form submission
+        document.getElementById('manualForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const paperName = document.getElementById('manualPaperName').value;
+            const totalQuestions = parseInt(document.getElementById('manualTotalQuestions').value);
+            const answersText = document.getElementById('manualAnswers').value;
+            
+            // Parse answers
+            const answers = [];
+            const lines = answersText.split('\n');
+            
+            for (let line of lines) {
+                line = line.trim();
+                if (line) {
+                    const parts = line.split('-');
+                    if (parts.length === 2) {
+                        const questionNum = parseInt(parts[0].trim());
+                        const optionsStr = parts[1].trim().toUpperCase();
+                        
+                        // Handle multiple options separated by comma
+                        const options = optionsStr.split(',').map(opt => opt.trim()).filter(opt => ['A', 'B', 'C', 'D'].includes(opt));
+                        
+                        if (questionNum > 0 && options.length > 0) {
+                            // Remove duplicates
+                            const uniqueOptions = [...new Set(options)];
+                            
+                            answers.push({
+                                question_number: questionNum,
+                                correct_option: uniqueOptions[0], // For backward compatibility
+                                correct_options: uniqueOptions,   // New format for multiple options
+                                question_type: uniqueOptions.length === 1 ? 'single' : 'multiple',
+                                marks: 1
+                            });
+                        }
+                    }
+                }
+            }
+            
+            const resultDiv = document.getElementById('manualResult');
+            
+            if (answers.length === 0) {
+                resultDiv.innerHTML = '<div class="error"><strong>❌ Error:</strong> No valid answers found. Please use format: 1-A (single), 2-A,B,C (multiple), etc.</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="loading">Creating answer key</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/manual-answer-key`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        paper_name: paperName,
+                        total_questions: totalQuestions,
+                        answers: answers
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Success!</strong> ${result.message}<br>
+                            <strong>Paper ID:</strong> ${result.paper_id}<br>
+                            <strong>Answers:</strong> ${result.answers_count}
+                        </div>
+                    `;
+                    // Immediately set student dropdown to this new paper only
+                    const paperNameFinal = document.getElementById('manualPaperName').value;
+                    const totalQs = parseInt(document.getElementById('manualTotalQuestions').value) || undefined;
+                    setStudentDropdownToPaper(result.paper_id, paperNameFinal, totalQs);
+                    loadQuestionPapers(); // Refresh Manage Papers list
+                    document.getElementById('manualForm').reset();
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${result.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${error.message}</div>`;
+            }
+        });
+        
+        // View paper answers
+        async function viewPaperAnswers(paperId) {
+            try {
+                const response = await fetch(`${API_BASE}/papers/${paperId}/answers`);
+                const result = await response.json();
+                
+                if (response.ok) {
+                    let answersHtml = `<h4>📝 Answers for: ${result.paper.paper_name}</h4>`;
+                    answersHtml += '<div style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border); padding: 15px; border-radius: 4px; background: var(--card);">';
+                    
+                    if (result.answers.length === 0) {
+                        answersHtml += '<p>No answers found for this paper.</p>';
+                    } else {
+                        result.answers.forEach(answer => {
+                            // Display multiple options if available, otherwise fall back to single option
+                            let optionsDisplay = answer.correct_option;
+                            if (answer.correct_options && Array.isArray(answer.correct_options)) {
+                                optionsDisplay = answer.correct_options.join(', ');
+                            }
+                            
+                            const questionType = answer.question_type === 'multiple' ? ' (Multiple)' : '';
+                            answersHtml += `<p><strong>Q${answer.question_number}:</strong> ${optionsDisplay}${questionType} <span style="color: var(--muted);">(${answer.marks} marks)</span></p>`;
+                        });
+                    }
+                    
+                    answersHtml += '</div>';
+                    
+                    // Show in a modal
+                    const modal = document.createElement('div');
+                    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;';
+                    modal.innerHTML = `
+                        <div style="background: var(--bg-soft); color: var(--text); padding: 25px; border-radius: 8px; max-width: 600px; max-height: 80vh; overflow-y: auto; width: 100%;">
+                            ${answersHtml}
+                            <div style="margin-top: 20px; text-align: center;">
+                                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="secondary">Close</button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+                } else {
+                    alert(`❌ Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        // Delete paper
+        async function deletePaper(paperId, paperName) {
+            if (!confirm(`⚠️ Are you sure you want to delete "${paperName}"?\n\nThis will also delete all student submissions and results for this paper. This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/papers/${paperId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert(`✅ ${result.message}`);
+                    loadQuestionPapers(); // Refresh the list
+                } else {
+                    alert(`❌ Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        // Handle multiple image selection and preview
+        let selectedImages = [];
+        
+        document.getElementById('answerSheetImages').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            selectedImages = files;
+            updateImagePreview();
+        });
+        
+        document.getElementById('clearImages').addEventListener('click', function() {
+            selectedImages = [];
+            document.getElementById('answerSheetImages').value = '';
+            updateImagePreview();
+        });
+        
+        function updateImagePreview() {
+            const container = document.getElementById('imagePreviewContainer');
+            const list = document.getElementById('imagePreviewList');
+            
+            if (selectedImages.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            list.innerHTML = '';
+            
+            selectedImages.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'image-preview-item';
+                
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = () => URL.revokeObjectURL(img.src);
+                
+                const info = document.createElement('div');
+                info.className = 'image-info';
+                info.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-image';
+                removeBtn.innerHTML = '×';
+                removeBtn.onclick = () => removeImage(index);
+                
+                item.appendChild(img);
+                item.appendChild(info);
+                item.appendChild(removeBtn);
+                list.appendChild(item);
+            });
+        }
+        
+        function removeImage(index) {
+            selectedImages.splice(index, 1);
+            updateImagePreview();
+            
+            // Update file input
+            const dt = new DataTransfer();
+            selectedImages.forEach(file => dt.items.add(file));
+            document.getElementById('answerSheetImages').files = dt.files;
+        }
+
+        // Student form submission
+        document.getElementById('studentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('paper_id', document.getElementById('paper_id').value);
+            formData.append('student_name', document.getElementById('studentName').value);
+            
+            // Handle multiple images
+            const imageFiles = document.getElementById('answerSheetImages').files;
+            if (capturedStudentSheetBlob) {
+                const fileFromBlob = new File([capturedStudentSheetBlob], 'answer-sheet.jpg', { type: capturedStudentSheetBlob.type || 'image/jpeg' });
+                formData.append('images', fileFromBlob);
+            } else if (imageFiles && imageFiles.length > 0) {
+                // Append all selected images
+                for (let i = 0; i < imageFiles.length; i++) {
+                    formData.append('images', imageFiles[i]);
+                }
+            } else {
+                const resultDiv = document.getElementById('studentResult');
+                resultDiv.innerHTML = '<div class="error"><strong>❌ Error:</strong> Please choose at least one image file.</div>';
+                return;
+            }
+            
+            const resultDiv = document.getElementById('studentResult');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            const imageCount = imageFiles ? imageFiles.length : (capturedStudentSheetBlob ? 1 : 0);
+            resultDiv.innerHTML = `<div class="loading">Processing ${imageCount} answer sheet image${imageCount > 1 ? 's' : ''} with AI OCR...</div>`;
+            
+            try {
+                const response = await fetch(`${API_BASE}/submit-answers`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.requires_confirmation) {
+                    // Debug logging
+                    console.log('OCR Result:', result);
+                    
+                    // Check if multiple students detected
+                    if (result.multiple_students) {
+                        // Multiple students confirmation
+                        const students = result.extracted_info.students || [];
+                        const paperInfo = result.extracted_info.paper_info || {};
+                        
+                        console.log('Multiple students detected:', students.length);
+                        console.log('Students data:', students);
+                        
+                        let paperInfoHtml = '';
+                        if (paperInfo.paper_name) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">📄 Paper:</strong> <span style="color: #2e7d32;">${paperInfo.paper_name}</span></p>`;
+                        if (paperInfo.subject) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">📚 Subject:</strong> <span style="color: #f57c00;">${paperInfo.subject}</span></p>`;
+                        if (paperInfo.date) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">📅 Date:</strong> <span style="color: #7b1fa2;">${paperInfo.date}</span></p>`;
+                        if (paperInfo.duration) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">⏱️ Duration:</strong> <span style="color: #d32f2f;">${paperInfo.duration}</span></p>`;
+                        if (paperInfo.total_marks) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">💯 Total Marks:</strong> <span style="color: #2e7d32; font-weight: 600;">${paperInfo.total_marks}</span></p>`;
+                        if (paperInfo.class_grade) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">🎓 Class:</strong> <span style="color: #f57c00;">${paperInfo.class_grade}</span></p>`;
+                        
+                        let studentsHtml = '';
+                        students.forEach((student, index) => {
+                            const answersCount = student.answers ? student.answers.length : 0;
+                            const imageCount = student.image_count || 1;
+                            studentsHtml += `
+                                <div style="border: 1px solid #007bff; padding: 15px; margin: 8px 0; border-radius: 8px; background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <h5 style="color: #1976d2; margin: 0 0 10px 0; font-weight: 600;">👤 Student ${index + 1}</h5>
+                                    <p style="color: #333; margin: 5px 0; font-size: 14px;"><strong style="color: #1976d2;">🎓 Roll Number:</strong> <span style="color: #2e7d32; font-weight: 600;">${student.roll_number || 'Unknown'}</span></p>
+                                    <p style="color: #333; margin: 5px 0; font-size: 14px;"><strong style="color: #1976d2;">📚 Section:</strong> <span style="color: #f57c00;">${student.section || 'Not detected'}</span></p>
+                                    <p style="color: #333; margin: 5px 0; font-size: 14px;"><strong style="color: #1976d2;">📝 Questions:</strong> <span style="color: #7b1fa2; font-weight: 600;">${answersCount}</span></p>
+                                    <p style="color: #333; margin: 5px 0; font-size: 14px;"><strong style="color: #1976d2;">📸 Images:</strong> <span style="color: #d32f2f; font-weight: 600;">${imageCount}</span></p>
+                                </div>
+                            `;
+                        });
+                        
+                        const confirmationHtml = `
+                            <div class="confirmation-popup" style="background: white; border: 2px solid #007bff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+                                <h3 style="color: #1976d2; text-align: center; margin: 0 0 20px 0; padding: 15px; background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%); border-radius: 10px 10px 0 0;">📋 Multiple Students Detected - Please Confirm</h3>
+                                <div class="extracted-info" style="padding: 0 20px;">
+                                    <p style="color: #333; font-size: 16px; margin: 10px 0;"><strong style="color: #1976d2;">👥 Students Found:</strong> <span style="color: #2e7d32; font-weight: 600;">${result.students_count}</span></p>
+                                    <p style="color: #333; font-size: 16px; margin: 10px 0;"><strong style="color: #1976d2;">📸 Total Images:</strong> <span style="color: #d32f2f; font-weight: 600;">${result.extracted_info.total_images}</span></p>
+                                    ${paperInfoHtml ? `<hr style="margin: 15px 0; border: 1px solid #e0e0e0;"><h4 style="color: #1976d2; margin: 10px 0;">📄 Paper Information:</h4><div style="color: #333;">${paperInfoHtml}</div>` : ''}
+                                    <hr style="margin: 15px 0; border: 1px solid #e0e0e0;">
+                                    <h4 style="color: #1976d2; margin: 15px 0 10px 0;">👥 Students Details:</h4>
+                                    ${studentsHtml}
+                                </div>
+                                <div class="confirmation-buttons" style="padding: 20px; text-align: center; border-top: 1px solid #e0e0e0; margin-top: 20px;">
+                                    <button onclick="confirmMultipleSubmissions(${JSON.stringify(result).replace(/"/g, '&quot;')})" class="primary" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; margin: 0 10px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">✅ Confirm All Students</button>
+                                    <button onclick="cancelSubmission()" class="secondary" style="background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; margin: 0 10px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">❌ Cancel</button>
+                                </div>
+                            </div>
+                        `;
+                        resultDiv.innerHTML = confirmationHtml;
+                    } else {
+                        // Single student confirmation (existing logic)
+                        const paperInfo = result.extracted_info.paper_info || {};
+                        let paperInfoHtml = '';
+                        
+                        if (paperInfo.paper_name) paperInfoHtml += `<p><strong>📄 Paper:</strong> ${paperInfo.paper_name}</p>`;
+                        if (paperInfo.subject) paperInfoHtml += `<p><strong>📚 Subject:</strong> ${paperInfo.subject}</p>`;
+                        if (paperInfo.date) paperInfoHtml += `<p><strong>📅 Date:</strong> ${paperInfo.date}</p>`;
+                        if (paperInfo.duration) paperInfoHtml += `<p><strong>⏱️ Duration:</strong> ${paperInfo.duration}</p>`;
+                        if (paperInfo.total_marks) paperInfoHtml += `<p><strong>💯 Total Marks:</strong> ${paperInfo.total_marks}</p>`;
+                        if (paperInfo.class_grade) paperInfoHtml += `<p><strong>🎓 Class:</strong> ${paperInfo.class_grade}</p>`;
+                        
+                        const confirmationHtml = `
+                            <div class="confirmation-popup">
+                                <h3>📋 Extracted Information - Please Confirm</h3>
+                                <div class="extracted-info">
+                                    <p><strong>🎓 Roll Number:</strong> ${result.extracted_info.roll_number}</p>
+                                    <p><strong>📚 Section:</strong> ${result.extracted_info.section || 'Not detected'}</p>
+                                    <p><strong>👤 Student Name:</strong> ${result.extracted_info.student_name || 'Not provided'}</p>
+                                    <p><strong>📝 Total Questions:</strong> ${result.extracted_info.total_questions}</p>
+                                    <p><strong>📸 Images Processed:</strong> ${result.extracted_info.images_processed || 1}</p>
+                                    ${paperInfoHtml ? `<hr style="margin: 10px 0; border: 1px solid #ddd;"><h4>📄 Paper Information:</h4>${paperInfoHtml}` : ''}
+                                </div>
+                                <div class="confirmation-buttons">
+                                    <button onclick="confirmSubmission(${JSON.stringify(result).replace(/"/g, '&quot;')})" class="primary">✅ Confirm & Submit</button>
+                                    <button onclick="cancelSubmission()" class="secondary">❌ Cancel</button>
+                                </div>
+                            </div>
+                        `;
+                        resultDiv.innerHTML = confirmationHtml;
+                    }
+                } else if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Success!</strong> Answer sheet submitted successfully!<br>
+                            <strong>Submission ID:</strong> ${result.submission_id}<br>
+                            <strong>Roll Number:</strong> ${result.roll_number}<br>
+                            <strong>Section:</strong> ${result.section || 'N/A'}<br>
+                            <strong>Extracted Answers:</strong> ${result.extracted_answers}<br>
+                            <em>Results have been calculated automatically. Use the Results section to view them.</em>
+                        </div>
+                    `;
+                    document.getElementById('studentForm').reset();
+                    capturedStudentSheetBlob = null;
+                    // Reset student preview
+                    const imgPrev = document.getElementById('studentCapturedPreview');
+                    if (imgPrev) { imgPrev.style.display = 'none'; imgPrev.src = ''; }
+                    // Stop camera if active
+                    if (window.__stopStudentCamera) window.__stopStudentCamera();
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${result.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${error.message}</div>`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Answer Sheet';
+            }
+        });
+        
+        // Confirmation functions
+        async function confirmSubmission(result) {
+            const resultDiv = document.getElementById('studentResult');
+            resultDiv.innerHTML = '<div class="loading">Confirming submission...</div>';
+            
+            try {
+                const confirmResponse = await fetch(`${API_BASE}/confirm-submission`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        paper_id: result.paper_id,
+                        roll_number: result.extracted_info.roll_number,
+                        section: result.extracted_info.section,
+                        student_name: result.extracted_info.student_name,
+                        answers: result.ocr_result.answers,
+                        images_count: result.extracted_info.images_processed || 1,
+                        paper_info: result.extracted_info.paper_info || {}
+                    })
+                });
+                
+                const confirmResult = await confirmResponse.json();
+                
+                if (confirmResponse.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Success!</strong> Answer sheet submitted successfully!<br>
+                            <strong>Submission ID:</strong> ${confirmResult.submission_id}<br>
+                            <strong>Roll Number:</strong> ${confirmResult.roll_number}<br>
+                            <strong>Section:</strong> ${confirmResult.section || 'N/A'}<br>
+                            <strong>Images Processed:</strong> ${result.extracted_info.images_processed || 1}<br>
+                            <strong>Extracted Answers:</strong> ${confirmResult.extracted_answers}<br>
+                            <em>Results have been calculated automatically. Use the Results section to view them.</em>
+                        </div>
+                    `;
+                    document.getElementById('studentForm').reset();
+                    capturedStudentSheetBlob = null;
+                    selectedImages = [];
+                    updateImagePreview();
+                    // Reset student preview
+                    const imgPrev = document.getElementById('studentCapturedPreview');
+                    if (imgPrev) { imgPrev.style.display = 'none'; imgPrev.src = ''; }
+                    // Stop camera if active
+                    if (window.__stopStudentCamera) window.__stopStudentCamera();
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${confirmResult.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${error.message}</div>`;
+            }
+        }
+        
+        async function confirmMultipleSubmissions(result) {
+            const resultDiv = document.getElementById('studentResult');
+            resultDiv.innerHTML = '<div class="loading">Confirming multiple student submissions...</div>';
+            
+            console.log('Confirming multiple submissions with data:', result);
+            
+            try {
+                const studentsData = result.extracted_info.students || [];
+                console.log('Students data to send:', studentsData);
+                
+                const confirmResponse = await fetch(`${API_BASE}/confirm-submission`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        paper_id: result.paper_id,
+                        multiple_students: true,
+                        students: studentsData
+                    })
+                });
+                
+                const confirmResult = await confirmResponse.json();
+                
+                if (confirmResponse.ok) {
+                    let successHtml = '';
+                    if (confirmResult.multiple_students) {
+                        // Multiple students success message
+                        let submissionsHtml = '';
+                        confirmResult.submissions.forEach(sub => {
+                            submissionsHtml += `
+                                <div style="border: 1px solid #28a745; padding: 12px; margin: 8px 0; border-radius: 6px; background: linear-gradient(135deg, #d4edda 0%, #f8fff9 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <strong style="color: #155724; font-size: 15px;">🎓 Roll ${sub.roll_number}:</strong> 
+                                    <span style="color: #333; font-weight: 500;">ID ${sub.submission_id}</span>
+                                    <br>
+                                    <small style="color: #666; margin-top: 4px; display: block;">📝 ${sub.answers_count} answers • 📸 ${sub.images_count} images</small>
+                                </div>
+                            `;
+                        });
+                        
+                        successHtml = `
+                            <div class="success">
+                                <strong>✅ Success!</strong> Multiple students processed successfully!<br>
+                                <strong>Total Students:</strong> ${confirmResult.total_students}<br>
+                                <strong>Submissions Created:</strong><br>
+                                ${submissionsHtml}
+                                <em>Results have been calculated automatically for all students. Use the Results section to view them.</em>
+                            </div>
+                        `;
+                    } else {
+                        // Fallback single student message
+                        successHtml = `
+                            <div class="success">
+                                <strong>✅ Success!</strong> Answer sheet submitted successfully!<br>
+                                <strong>Total Students:</strong> ${confirmResult.total_students || 1}<br>
+                                <em>Results have been calculated automatically. Use the Results section to view them.</em>
+                            </div>
+                        `;
+                    }
+                    resultDiv.innerHTML = successHtml;
+                    document.getElementById('studentForm').reset();
+                    capturedStudentSheetBlob = null;
+                    selectedImages = [];
+                    updateImagePreview();
+                    // Reset student preview
+                    const imgPrev = document.getElementById('studentCapturedPreview');
+                    if (imgPrev) { imgPrev.style.display = 'none'; imgPrev.src = ''; }
+                    // Stop camera if active
+                    if (window.__stopStudentCamera) window.__stopStudentCamera();
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${confirmResult.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${error.message}</div>`;
+            }
+        }
+        
+        function cancelSubmission() {
+            const resultDiv = document.getElementById('studentResult');
+            resultDiv.innerHTML = '<div class="info">Submission cancelled. Please try again.</div>';
+            
+            // Re-enable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Answer Sheet';
+        }
+        
+        // Results form submission
+        document.getElementById('resultsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const rollNumber = document.getElementById('searchRoll').value;
+            const resultDiv = document.getElementById('resultsDisplay');
+            resultDiv.innerHTML = '<div class="loading">Loading results</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/results/${rollNumber}`);
+                const result = await response.json();
+                
+                if (response.ok) {
+                    displayResults(result, resultDiv);
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${result.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${error.message}</div>`;
+            }
+        });
+
+        // Export form submission
+        document.getElementById('exportForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const paperId = document.getElementById('exportPaperId').value;
+            const resultDiv = document.getElementById('exportResult');
+            const previewDiv = document.getElementById('exportPreview');
+            
+            if (!paperId) {
+                resultDiv.innerHTML = '<div class="error"><strong>❌ Error:</strong> Please select a paper to export.</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="loading">Preparing Excel export</div>';
+            previewDiv.innerHTML = '';
+            
+            try {
+                // First, get a preview of the data
+                const previewResponse = await fetch(`${API_BASE}/papers/${paperId}/submissions-preview`);
+                if (previewResponse.ok) {
+                    const previewData = await previewResponse.json();
+                    showExportPreview(previewData, previewDiv);
+                }
+                
+                // Direct download using window.location for proper file handling
+                const exportUrl = `${API_BASE}/export/${paperId}`;
+                window.location.href = exportUrl;
+                
+                resultDiv.innerHTML = '<div class="success"><strong>✅ Success:</strong> Excel file download started! Check your downloads folder.</div>';
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> Export failed: ${error.message}</div>`;
+            }
+        });
+        
+        function displayResults(data, container) {
+            if (data.length === 0) {
+                container.innerHTML = '<div class="error">❌ No results found for this roll number.</div>';
+                return;
+            }
+            
+            let html = '';
+            data.forEach(result => {
+                const percentage = Number(result.percentage) || 0;
+                const gradeColor = percentage >= 90 ? '#28a745' : 
+                                 percentage >= 80 ? '#17a2b8' : 
+                                 percentage >= 70 ? '#ffc107' : 
+                                 percentage >= 60 ? '#fd7e14' : '#dc3545';
+                
+                const grade = percentage >= 90 ? 'A' : 
+                             percentage >= 80 ? 'B' : 
+                             percentage >= 70 ? 'C' : 
+                             percentage >= 60 ? 'D' : 'F';
+                
+                html += `
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div>
+                                <h3>📄 ${result.paper_name}</h3>
+                                <p><strong>🎓 Roll:</strong> ${result.roll_number} | <strong>👤 Name:</strong> ${result.student_name || 'Not provided'}</p>
+                                <p><strong>📅 Submitted:</strong> ${new Date(result.submitted_at).toLocaleString()}</p>
+                                ${result.images_count > 1 ? `<p><strong>📸 Images:</strong> ${result.images_count} pages processed</p>` : ''}
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="score">${result.total_marks || 0} marks</div>
+                                <div style="font-size: 14px; color: var(--muted); margin-bottom: 5px;">${result.correct_answers || 0}/${result.total_questions} questions</div>
+                                <div class="percentage" style="color: ${gradeColor}">${percentage.toFixed(1)}% (${grade})</div>
+                            </div>
+                        </div>
+                        <button onclick="viewDetailedResults(${result.submission_id})" class="secondary">📊 View Detailed Results</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+        
+        async function viewDetailedResults(submissionId) {
+            try {
+                const response = await fetch(`${API_BASE}/results/detailed/${submissionId}`);
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showDetailedResultsModal(result);
+                } else {
+                    alert(`❌ Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        function showDetailedResultsModal(data) {
+            const { submission, questions, statistics } = data;
+            
+            let questionsHtml = '<div class="question-grid">';
+            questions.forEach(q => {
+                const statusClass = q.status === 'correct' ? 'question-correct' : 
+                                   q.status === 'partial' ? 'question-partial' :
+                                   q.status === 'incorrect' ? 'question-incorrect' : 
+                                   'question-not-answered';
+                
+                const statusText = q.status === 'correct' ? '✅' : 
+                                  q.status === 'partial' ? '🟡' :
+                                  q.status === 'incorrect' ? '❌' : 
+                                  '❓';
+                
+                questionsHtml += `
+                    <div class="question-item ${statusClass}">
+                        <div><strong>Q${q.question_number}</strong> ${statusText} ${q.question_type === 'multiple' ? '(Multiple)' : ''}</div>
+                        <div style="font-size: 12px; margin-top: 8px;">
+                            <strong>Selected:</strong> ${q.selected_options ? q.selected_options.join(', ') : (q.selected_option || 'None')}<br>
+                            <strong>Correct:</strong> ${q.correct_options ? q.correct_options.join(', ') : q.correct_option}<br>
+                            <strong>Marks:</strong> ${q.marks || 0}/${q.total_marks || 1}
+                            ${q.marking_explanation ? `<br><em style="color: #666;">${q.marking_explanation}</em>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            questionsHtml += '</div>';
+            
+            const percentage = Number(statistics.percentage) || 0;
+            const gradeColor = percentage >= 90 ? '#28a745' : 
+                             percentage >= 80 ? '#17a2b8' : 
+                             percentage >= 70 ? '#ffc107' : 
+                             percentage >= 60 ? '#fd7e14' : '#dc3545';
+            
+            const modal = document.createElement('div');
+            // Change modal background to fit dark theme
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; box-sizing: border-box;';
+            modal.innerHTML = `
+                <div style="background: var(--bg-soft); padding: 25px; border-radius: 8px; max-width: 900px; max-height: 90vh; overflow-y: auto; width: 100%;">
+                    <h3>📊 Detailed Results: ${submission.paper_name}</h3>
+                    <div style="background: var(--card); padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+    <p><strong>🎓 Student:</strong> ${submission.roll_number} - ${submission.student_name || 'N/A'}</p>
+    <p><strong>📈 Score:</strong> ${statistics.correct}/${statistics.total_questions} questions <span style="color: ${gradeColor}; font-weight: bold;">(${statistics.percentage}%)</span></p>
+    <p><strong>🎯 Marks:</strong> ${submission.total_marks} marks earned</p>
+    <p><strong>📋 Breakdown:</strong> 
+        <span style="color: #28a745;">✅ ${statistics.correct} Correct</span> | 
+        <span style="color: #dc3545;">❌ ${statistics.incorrect} Incorrect</span> | 
+        <span style="color: #ffc107;">❓ ${statistics.not_answered} Not Answered</span>
+    </p>
+</div>
+                    
+                    <h4>📝 Question-wise Results:</h4>
+                    ${questionsHtml}
+                    
+                    <div style="margin-top: 25px; text-align: center;">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="secondary">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        async function loadAnalytics() {
+            const container = document.getElementById('analyticsDisplay');
+            container.innerHTML = '<div class="loading">Loading analytics</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/results/analytics`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayAnalytics(data, container);
+                } else {
+                    container.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${data.error}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${error.message}</div>`;
+            }
+        }
+        
+        function displayAnalytics(data, container) {
+            const { overview, top_performers, grade_distribution } = data;
+            
+            let html = '<div class="analytics-grid">';
+            
+            // Overview cards
+            html += `
+                <div class="analytics-card">
+                    <h4>📄 Total Papers</h4>
+                    <div class="stat-number">${overview.total_papers}</div>
+                    <p style="color: #666; margin: 0;">Question papers created</p>
+                </div>
+                <div class="analytics-card">
+                    <h4>📝 Total Submissions</h4>
+                    <div class="stat-number">${overview.total_submissions}</div>
+                    <p style="color: #666; margin: 0;">Answer sheets submitted</p>
+                </div>
+                <div class="analytics-card">
+                    <h4>🎓 Unique Students</h4>
+                    <div class="stat-number">${overview.unique_students}</div>
+                    <p style="color: #666; margin: 0;">Students participated</p>
+                </div>
+                <div class="analytics-card">
+                    <h4>📊 Average Performance</h4>
+                    <div class="stat-number">${overview.average_performance}%</div>
+                    <p style="color: #666; margin: 0;">Overall class average</p>
+                </div>
+            `;
+            
+            html += '</div>';
+            
+            // Top performers
+            if (top_performers.length > 0) {
+                html += '<div class="analytics-card" style="margin-top: 20px;"><h4>🏆 Top Performers</h4>';
+                top_performers.forEach((performer, index) => {
+                    const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏅';
+                    html += `
+                        <p>${medal} <strong>${performer.roll_number}</strong> ${performer.student_name ? '(' + performer.student_name + ')' : ''} - <strong>${performer.percentage}%</strong> <em>(${performer.paper_name})</em></p>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            // Grade distribution
+            if (grade_distribution.length > 0) {
+                html += '<div class="analytics-card" style="margin-top: 20px;"><h4>📈 Grade Distribution</h4>';
+                const totalSubmissions = overview.total_submissions || 1;
+                grade_distribution.forEach(grade => {
+                    const percentage = (grade.count / totalSubmissions) * 100;
+                    html += `
+                        <div class="grade-bar">
+                            <div class="grade-label">${grade.grade}</div>
+                            <div style="flex: 1; background: #e9ecef; height: 24px; border-radius: 12px; margin: 0 10px; overflow: hidden;">
+                                <div style="background: #007bff; height: 100%; width: ${percentage}%; border-radius: 12px; transition: width 0.3s ease;"></div>
+                            </div>
+                            <div class="grade-count">${grade.count} (${percentage.toFixed(1)}%)</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function showExportPreview(data, container) {
+            if (!data || !data.submissions || data.submissions.length === 0) {
+                container.innerHTML = '<div class="info">📝 No submissions found for this paper.</div>';
+                return;
+            }
+
+            let html = `
+                <div class="info" style="margin-top: 20px;">
+                    <strong>📊 Export Preview:</strong> Found ${data.submissions.length} student${data.submissions.length > 1 ? 's' : ''} for "${data.paper_name}"
+                </div>
+                <div style="overflow-x: auto; margin-top: 15px;">
+                    <table style="width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow);">
+                        <thead>
+                            <tr style="background: var(--primary); color: white;">
+                                <th style="padding: 12px; text-align: left;">🎓 Roll</th>
+                                <th style="padding: 12px; text-align: left;">👤 Name</th>
+                                <th style="padding: 12px; text-align: center;">📊 Marks</th>
+                                <th style="padding: 12px; text-align: center;">📈 %</th>
+                                <th style="padding: 12px; text-align: center;">🏆 Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            data.submissions.slice(0, 10).forEach((submission, index) => {
+                const percentage = parseFloat(submission.percentage) || 0;
+                const grade = percentage >= 90 ? 'A+' : 
+                             percentage >= 80 ? 'A' : 
+                             percentage >= 70 ? 'B+' : 
+                             percentage >= 60 ? 'B' : 
+                             percentage >= 50 ? 'C' : 'F';
+                
+                const gradeColor = percentage >= 90 ? '#28a745' : 
+                                  percentage >= 80 ? '#17a2b8' : 
+                                  percentage >= 70 ? '#ffc107' : 
+                                  percentage >= 60 ? '#fd7e14' : '#dc3545';
+
+                html += `
+                    <tr style="border-bottom: 1px solid var(--border); ${index % 2 === 0 ? 'background: var(--bg-soft);' : ''}">
+                        <td style="padding: 12px; font-weight: bold;">${submission.roll_number}</td>
+                        <td style="padding: 12px;">${submission.student_name || 'Not provided'}</td>
+                        <td style="padding: 12px; text-align: center; font-weight: bold;">${submission.total_marks}/${data.max_marks || 0}</td>
+                        <td style="padding: 12px; text-align: center; font-weight: bold;">${percentage.toFixed(1)}%</td>
+                        <td style="padding: 12px; text-align: center; font-weight: bold; color: ${gradeColor};">${grade}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            
+            if (data.submissions.length > 10) {
+                html += `<div class="info" style="margin-top: 10px; text-align: center;">... and ${data.submissions.length - 10} more students</div>`;
+            }
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        async function loadAllSubmissions() {
+            const container = document.getElementById('submissionsDisplay');
+            container.innerHTML = '<div class="loading">Loading submissions</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/submissions`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayAllSubmissions(data, container);
+                } else {
+                    container.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${data.error}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${error.message}</div>`;
+            }
+        }
+        
+        function displayAllSubmissions(data, container) {
+            if (data.length === 0) {
+                container.innerHTML = '<div class="info">📝 No submissions found. Students can start submitting their answer sheets!</div>';
+                return;
+            }
+            
+            let html = '<div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">';
+            html += `
+                <thead>
+                    <tr style="background: #007bff; color: white;">
+                        <th style="padding: 15px; text-align: left;">🎓 Roll Number</th>
+                        <th style="padding: 15px; text-align: left;">👤 Student Name</th>
+                        <th style="padding: 15px; text-align: left;">📄 Paper</th>
+                        <th style="padding: 15px; text-align: center;">📊 Score</th>
+                        <th style="padding: 15px; text-align: center;">📈 Percentage</th>
+                        <th style="padding: 15px; text-align: center;">📅 Submitted</th>
+                        <th style="padding: 15px; text-align: center;">⚙️ Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            data.forEach((submission, index) => {
+                const percentage = Number(submission.percentage) || 0;
+                const gradeColor = percentage >= 90 ? '#28a745' : 
+                                 percentage >= 80 ? '#17a2b8' : 
+                                 percentage >= 70 ? '#ffc107' : 
+                                 percentage >= 60 ? '#fd7e14' : '#dc3545';
+                
+                const rowBg = index % 2 === 0 ? '#f8f9fa' : 'white';
+                
+                html += `
+                    <tr style="background: ${rowBg};">
+                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6;"><strong>${submission.roll_number}</strong></td>
+                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${submission.student_name || 'N/A'}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${submission.paper_name}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6; text-align: center;"><strong>${submission.correct_answers || 0}/${submission.total_questions}</strong></td>
+                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6; text-align: center; color: ${gradeColor}; font-weight: bold;">${percentage.toFixed(1)}%</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6; text-align: center;">${new Date(submission.submitted_at).toLocaleDateString()}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6; text-align: center;">
+                            <button onclick="viewDetailedResults(${submission.id})" class="secondary" style="padding: 6px 12px; font-size: 12px;">📊 Details</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table></div>';
+            
+            // Add summary
+            const totalSubmissions = data.length;
+            const avgPercentage = data.reduce((sum, s) => sum + (Number(s.percentage) || 0), 0) / totalSubmissions;
+            
+            html += `
+                <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 4px;">
+                    <strong>📊 Summary:</strong> ${totalSubmissions} total submissions • Average: ${avgPercentage.toFixed(1)}%
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
