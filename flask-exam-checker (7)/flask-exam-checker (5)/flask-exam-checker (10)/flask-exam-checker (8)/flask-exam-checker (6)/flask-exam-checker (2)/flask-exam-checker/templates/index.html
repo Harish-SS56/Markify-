@@ -208,22 +208,23 @@
         }
         .paper-item {
             padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
+            background: var(--bg-soft);
         }
         .paper-info h4 {
             margin: 0 0 5px 0;
-            color: #333;
+            color: var(--text);
         }
         .paper-info p {
             margin: 0;
-            color: #666;
+            color: var(--muted);
             font-size: 14px;
         }
         .result-card {
@@ -245,11 +246,11 @@
         .score {
             font-size: 28px;
             font-weight: bold;
-            color: #007bff;
+            color: var(--primary);
         }
         .percentage {
             font-size: 20px;
-            color: #28a745;
+            color: var(--success);
             font-weight: bold;
         }
         .question-grid {
@@ -272,7 +273,7 @@
             border: 1px solid var(--success);
         }
         .question-partial {
-            background-color: #ff9800;
+            background-color: #ff9800; /* Orange for partial */
             color: var(--bg-soft);
             border: 1px solid #ff9800;
         }
@@ -320,10 +321,11 @@
             width: 120px;
             font-weight: bold;
             font-size: 14px;
+            color: var(--text);
         }
         .grade-count {
             margin-left: 10px;
-            color: #666;
+            color: var(--muted);
             font-weight: bold;
         }
         .loading {
@@ -348,15 +350,19 @@
         }
         .help-text {
             font-size: 12px;
-            color: #666;
+            color: var(--muted);
             margin-top: 5px;
         }
         .confirmation-popup {
-            background: var(--card-bg);
+            background: var(--card); /* Changed from var(--card-bg) */
             border: 2px solid var(--primary);
             border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
+            color: var(--text); /* Ensure text is readable */
+        }
+        .confirmation-popup h3 {
+            color: var(--primary);
         }
         .extracted-info {
             background: var(--bg);
@@ -368,6 +374,7 @@
         .extracted-info p {
             margin: 8px 0;
             font-size: 16px;
+            color: var(--text);
         }
         .confirmation-buttons {
             display: flex;
@@ -384,41 +391,66 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        .confirmation-buttons .primary {
-            background: var(--primary);
-            color: white;
+        /* Multi-image upload styles */
+        .image-preview-container {
+            margin-top: 15px;
+            padding: 15px;
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            background-color: var(--bg-soft);
         }
-        .confirmation-buttons .primary:hover {
-            background: var(--primary-dark);
+        
+        .image-preview-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
         }
-        .confirmation-buttons .secondary {
-            background: var(--muted);
-            color: var(--text);
+        
+        .image-preview-item {
+            position: relative;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--card);
         }
-        .confirmation-buttons .secondary:hover {
-            background: var(--error);
-            color: white;
+        
+        .image-preview-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
         }
-        .status-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
+        
+        .image-preview-item .image-info {
+            padding: 8px;
             font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
+            color: var(--muted);
+            text-align: center;
+            background: var(--bg);
         }
-        .status-processing {
-            background-color: #fff3cd;
-            color: #856404;
+        
+        .image-preview-item .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .status-completed {
-            background-color: #d4edda;
-            color: #155724;
+        
+        .image-preview-item .remove-image:hover {
+            background: #c82333;
         }
-        .status-error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -448,66 +480,6 @@
             .analytics-grid {
                 grid-template-columns: 1fr;
             }
-        }
-        
-        /* Multi-image upload styles */
-        .image-preview-container {
-            margin-top: 15px;
-            padding: 15px;
-            border: 2px dashed #007bff;
-            border-radius: 8px;
-            background-color: #f8f9fa;
-        }
-        
-        .image-preview-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
-        
-        .image-preview-item {
-            position: relative;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            background: white;
-        }
-        
-        .image-preview-item img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .image-preview-item .image-info {
-            padding: 8px;
-            font-size: 12px;
-            color: #666;
-            text-align: center;
-            background: #f8f9fa;
-        }
-        
-        .image-preview-item .remove-image {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .image-preview-item .remove-image:hover {
-            background: #c82333;
         }
     </style>
 </head>
@@ -583,7 +555,13 @@
                     </div>
                     <div class="form-group">
                         <label>Answer Key (Format: Question Number - Correct Option(s)):</label>
-                        <textarea id="manualAnswers" rows="10" placeholder="Example:&#10;1-A&#10;2-B,C&#10;3-A,B,D&#10;4-D&#10;5-A&#10;..."></textarea>
+                        <textarea id="manualAnswers" rows="10" placeholder="Example:
+1-A
+2-B,C
+3-A,B,D
+4-D
+5-A
+..."></textarea>
                         <div class="help-text">
                             <strong>Single Answer:</strong> QuestionNumber-Option (e.g., 1-A, 2-B)<br>
                             <strong>Multiple Answers:</strong> QuestionNumber-Option1,Option2,Option3 (e.g., 2-A,C, 3-B,D)<br>
@@ -1072,13 +1050,14 @@
         // =============================
         // Insert camera controls below student file input
         (function initStudentCameraUI() {
-            const studentGroup = document.getElementById('answerSheetImage')?.parentElement;
+            const studentGroup = document.getElementById('answerSheetImages').parentElement;
             if (!studentGroup) return;
             const row = document.createElement('div');
             row.style.display = 'flex';
             row.style.flexWrap = 'wrap';
             row.style.gap = '10px';
             row.style.alignItems = 'center';
+            row.style.marginTop = '10px';
             row.innerHTML = `
                 <button type="button" id="studentStartCameraBtn" class="secondary">📷 Start Camera</button>
                 <button type="button" id="studentCaptureBtn" style="display:none;">📸 Capture Photo</button>
@@ -1125,11 +1104,11 @@
                     retBtn.style.display = 'none';
                     imgPrev.style.display = 'none';
                     // Disable file input while camera mode is active
-                    const sfi = document.getElementById('answerSheetImage');
+                    const sfi = document.getElementById('answerSheetImages');
                     if (sfi) { sfi.disabled = true; sfi.style.opacity = '0.6'; }
                 } catch (err) {
                     // Fallback: open file picker with camera hint if possible
-                    const sfi = document.getElementById('answerSheetImage');
+                    const sfi = document.getElementById('answerSheetImages');
                     if (sfi) {
                         try {
                             sfi.setAttribute('capture', 'environment');
@@ -1153,7 +1132,7 @@
                 stopBtn.style.display = 'none';
                 startBtn.style.display = 'inline-block';
                 // Re-enable file input and clear capture hint
-                const sfi = document.getElementById('answerSheetImage');
+                const sfi = document.getElementById('answerSheetImages');
                 if (sfi) { sfi.disabled = false; sfi.style.opacity = '1'; try { sfi.removeAttribute('capture'); } catch (_) {} }
             }
 
@@ -1174,7 +1153,7 @@
                     capBtn.style.display = 'none';
                     retBtn.style.display = 'inline-block';
                     // Not required to choose file now
-                    const sfi = document.getElementById('answerSheetImage');
+                    const sfi = document.getElementById('answerSheetImages');
                     if (sfi) sfi.required = false;
                 }, 'image/jpeg', 0.92);
             }
@@ -1190,7 +1169,7 @@
                 vid.style.display = 'block';
                 capBtn.style.display = 'inline-block';
                 retBtn.style.display = 'none';
-                const sfi = document.getElementById('answerSheetImage');
+                const sfi = document.getElementById('answerSheetImages');
                 if (sfi) sfi.required = true;
             }
 
@@ -1233,7 +1212,7 @@
                             answers.push({
                                 question_number: questionNum,
                                 correct_option: uniqueOptions[0], // For backward compatibility
-                                correct_options: uniqueOptions,   // New format for multiple options
+                                correct_options: uniqueOptions,    // New format for multiple options
                                 question_type: uniqueOptions.length === 1 ? 'single' : 'multiple',
                                 marks: 1
                             });
@@ -1363,6 +1342,12 @@
         let selectedImages = [];
         
         document.getElementById('answerSheetImages').addEventListener('change', function(e) {
+            // If camera was used, this file input change should replace the captured photo logic
+            capturedStudentSheetBlob = null;
+            const imgPrev = document.getElementById('studentCapturedPreview');
+            if (imgPrev) { imgPrev.style.display = 'none'; imgPrev.src = ''; }
+            if (window.__stopStudentCamera) window.__stopStudentCamera();
+            
             const files = Array.from(e.target.files);
             selectedImages = files;
             updateImagePreview();
@@ -1372,6 +1357,11 @@
             selectedImages = [];
             document.getElementById('answerSheetImages').value = '';
             updateImagePreview();
+            
+            // Re-enable required if camera isn't active
+            if (!capturedStudentSheetBlob && !document.getElementById('studentCameraPreview').style.display) {
+                document.getElementById('answerSheetImages').required = true;
+            }
         });
         
         function updateImagePreview() {
@@ -1418,6 +1408,11 @@
             const dt = new DataTransfer();
             selectedImages.forEach(file => dt.items.add(file));
             document.getElementById('answerSheetImages').files = dt.files;
+            
+            // Re-enable required if no images are left and camera is off
+            if (selectedImages.length === 0 && !capturedStudentSheetBlob && !document.getElementById('studentCameraPreview').style.display) {
+                document.getElementById('answerSheetImages').required = true;
+            }
         }
 
         // Student form submission
@@ -1430,6 +1425,7 @@
             
             // Handle multiple images
             const imageFiles = document.getElementById('answerSheetImages').files;
+            
             if (capturedStudentSheetBlob) {
                 const fileFromBlob = new File([capturedStudentSheetBlob], 'answer-sheet.jpg', { type: capturedStudentSheetBlob.type || 'image/jpeg' });
                 formData.append('images', fileFromBlob);
@@ -1450,7 +1446,7 @@
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.textContent = 'Processing...';
-            const imageCount = imageFiles ? imageFiles.length : (capturedStudentSheetBlob ? 1 : 0);
+            const imageCount = imageFiles.length > 0 ? imageFiles.length : (capturedStudentSheetBlob ? 1 : 0);
             resultDiv.innerHTML = `<div class="loading">Processing ${imageCount} answer sheet image${imageCount > 1 ? 's' : ''} with AI OCR...</div>`;
             
             try {
@@ -1475,42 +1471,42 @@
                         console.log('Students data:', students);
                         
                         let paperInfoHtml = '';
-                        if (paperInfo.paper_name) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">📄 Paper:</strong> <span style="color: #2e7d32;">${paperInfo.paper_name}</span></p>`;
-                        if (paperInfo.subject) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">📚 Subject:</strong> <span style="color: #f57c00;">${paperInfo.subject}</span></p>`;
-                        if (paperInfo.date) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">📅 Date:</strong> <span style="color: #7b1fa2;">${paperInfo.date}</span></p>`;
-                        if (paperInfo.duration) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">⏱️ Duration:</strong> <span style="color: #d32f2f;">${paperInfo.duration}</span></p>`;
-                        if (paperInfo.total_marks) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">💯 Total Marks:</strong> <span style="color: #2e7d32; font-weight: 600;">${paperInfo.total_marks}</span></p>`;
-                        if (paperInfo.class_grade) paperInfoHtml += `<p style="color: #333; margin: 5px 0;"><strong style="color: #1976d2;">🎓 Class:</strong> <span style="color: #f57c00;">${paperInfo.class_grade}</span></p>`;
+                        if (paperInfo.paper_name) paperInfoHtml += `<p style="color: var(--text); margin: 5px 0;"><strong style="color: var(--primary);">📄 Paper:</strong> <span style="color: var(--success);">${paperInfo.paper_name}</span></p>`;
+                        if (paperInfo.subject) paperInfoHtml += `<p style="color: var(--text); margin: 5px 0;"><strong style="color: var(--primary);">📚 Subject:</strong> <span style="color: var(--warning);">${paperInfo.subject}</span></p>`;
+                        if (paperInfo.date) paperInfoHtml += `<p style="color: var(--text); margin: 5px 0;"><strong style="color: var(--primary);">📅 Date:</strong> <span style="color: var(--muted);">${paperInfo.date}</span></p>`;
+                        if (paperInfo.duration) paperInfoHtml += `<p style="color: var(--text); margin: 5px 0;"><strong style="color: var(--primary);">⏱️ Duration:</strong> <span style="color: var(--danger);">${paperInfo.duration}</span></p>`;
+                        if (paperInfo.total_marks) paperInfoHtml += `<p style="color: var(--text); margin: 5px 0;"><strong style="color: var(--primary);">💯 Total Marks:</strong> <span style="color: var(--success); font-weight: 600;">${paperInfo.total_marks}</span></p>`;
+                        if (paperInfo.class_grade) paperInfoHtml += `<p style="color: var(--text); margin: 5px 0;"><strong style="color: var(--primary);">🎓 Class:</strong> <span style="color: var(--warning);">${paperInfo.class_grade}</span></p>`;
                         
                         let studentsHtml = '';
                         students.forEach((student, index) => {
                             const answersCount = student.answers ? student.answers.length : 0;
                             const imageCount = student.image_count || 1;
                             studentsHtml += `
-                                <div style="border: 1px solid #007bff; padding: 15px; margin: 8px 0; border-radius: 8px; background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                    <h5 style="color: #1976d2; margin: 0 0 10px 0; font-weight: 600;">👤 Student ${index + 1}</h5>
-                                    <p style="color: #333; margin: 5px 0; font-size: 14px;"><strong style="color: #1976d2;">🎓 Roll Number:</strong> <span style="color: #2e7d32; font-weight: 600;">${student.roll_number || 'Unknown'}</span></p>
-                                    <p style="color: #333; margin: 5px 0; font-size: 14px;"><strong style="color: #1976d2;">📚 Section:</strong> <span style="color: #f57c00;">${student.section || 'Not detected'}</span></p>
-                                    <p style="color: #333; margin: 5px 0; font-size: 14px;"><strong style="color: #1976d2;">📝 Questions:</strong> <span style="color: #7b1fa2; font-weight: 600;">${answersCount}</span></p>
-                                    <p style="color: #333; margin: 5px 0; font-size: 14px;"><strong style="color: #1976d2;">📸 Images:</strong> <span style="color: #d32f2f; font-weight: 600;">${imageCount}</span></p>
+                                <div style="border: 1px solid var(--primary); padding: 15px; margin: 8px 0; border-radius: 8px; background: var(--bg); box-shadow: var(--shadow);">
+                                    <h5 style="color: var(--primary); margin: 0 0 10px 0; font-weight: 600;">👤 Student ${index + 1}</h5>
+                                    <p style="color: var(--text); margin: 5px 0; font-size: 14px;"><strong style="color: var(--primary);">🎓 Roll Number:</strong> <span style="color: var(--success); font-weight: 600;">${student.roll_number || 'Unknown'}</span></p>
+                                    <p style="color: var(--text); margin: 5px 0; font-size: 14px;"><strong style="color: var(--primary);">📚 Section:</strong> <span style="color: var(--warning);">${student.section || 'Not detected'}</span></p>
+                                    <p style="color: var(--text); margin: 5px 0; font-size: 14px;"><strong style="color: var(--primary);">📝 Questions:</strong> <span style="color: var(--muted); font-weight: 600;">${answersCount}</span></p>
+                                    <p style="color: var(--text); margin: 5px 0; font-size: 14px;"><strong style="color: var(--primary);">📸 Images:</strong> <span style="color: var(--danger); font-weight: 600;">${imageCount}</span></p>
                                 </div>
                             `;
                         });
                         
                         const confirmationHtml = `
-                            <div class="confirmation-popup" style="background: white; border: 2px solid #007bff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
-                                <h3 style="color: #1976d2; text-align: center; margin: 0 0 20px 0; padding: 15px; background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%); border-radius: 10px 10px 0 0;">📋 Multiple Students Detected - Please Confirm</h3>
-                                <div class="extracted-info" style="padding: 0 20px;">
-                                    <p style="color: #333; font-size: 16px; margin: 10px 0;"><strong style="color: #1976d2;">👥 Students Found:</strong> <span style="color: #2e7d32; font-weight: 600;">${result.students_count}</span></p>
-                                    <p style="color: #333; font-size: 16px; margin: 10px 0;"><strong style="color: #1976d2;">📸 Total Images:</strong> <span style="color: #d32f2f; font-weight: 600;">${result.extracted_info.total_images}</span></p>
-                                    ${paperInfoHtml ? `<hr style="margin: 15px 0; border: 1px solid #e0e0e0;"><h4 style="color: #1976d2; margin: 10px 0;">📄 Paper Information:</h4><div style="color: #333;">${paperInfoHtml}</div>` : ''}
-                                    <hr style="margin: 15px 0; border: 1px solid #e0e0e0;">
-                                    <h4 style="color: #1976d2; margin: 15px 0 10px 0;">👥 Students Details:</h4>
+                            <div class="confirmation-popup" style="background: var(--card); border: 2px solid var(--primary); border-radius: 12px; box-shadow: var(--shadow);">
+                                <h3 style="color: var(--primary); text-align: center; margin: 0 0 20px 0; padding: 15px; background: linear-gradient(135deg, rgba(108,140,255,0.1), rgba(108,140,255,0.05)); border-radius: 10px 10px 0 0;">📋 Multiple Students Detected - Please Confirm</h3>
+                                <div class="extracted-info" style="padding: 0 20px; background: none; border-left: none;">
+                                    <p style="color: var(--text); font-size: 16px; margin: 10px 0;"><strong style="color: var(--primary);">👥 Students Found:</strong> <span style="color: var(--success); font-weight: 600;">${result.students_count}</span></p>
+                                    <p style="color: var(--text); font-size: 16px; margin: 10px 0;"><strong style="color: var(--primary);">📸 Total Images:</strong> <span style="color: var(--danger); font-weight: 600;">${result.extracted_info.total_images}</span></p>
+                                    ${paperInfoHtml ? `<hr style="margin: 15px 0; border: 1px solid var(--border);"><h4 style="color: var(--primary); margin: 10px 0;">📄 Paper Information:</h4><div style="color: var(--text);">${paperInfoHtml}</div>` : ''}
+                                    <hr style="margin: 15px 0; border: 1px solid var(--border);">
+                                    <h4 style="color: var(--primary); margin: 15px 0 10px 0;">👥 Students Details:</h4>
                                     ${studentsHtml}
                                 </div>
-                                <div class="confirmation-buttons" style="padding: 20px; text-align: center; border-top: 1px solid #e0e0e0; margin-top: 20px;">
-                                    <button onclick="confirmMultipleSubmissions(${JSON.stringify(result).replace(/"/g, '&quot;')})" class="primary" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; margin: 0 10px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">✅ Confirm All Students</button>
-                                    <button onclick="cancelSubmission()" class="secondary" style="background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; margin: 0 10px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">❌ Cancel</button>
+                                <div class="confirmation-buttons" style="padding: 20px; text-align: center; border-top: 1px solid var(--border); margin-top: 20px;">
+                                    <button onclick="confirmMultipleSubmissions(${JSON.stringify(result).replace(/"/g, '&quot;')})" class="primary" style="background: linear-gradient(135deg, var(--success) 0%, #20c997 100%); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; margin: 0 10px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">✅ Confirm All Students</button>
+                                    <button onclick="cancelSubmission()" class="secondary" style="background: linear-gradient(135deg, var(--danger) 0%, #ff6b7f 100%); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; margin: 0 10px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">❌ Cancel</button>
                                 </div>
                             </div>
                         `;
@@ -1536,7 +1532,7 @@
                                     <p><strong>👤 Student Name:</strong> ${result.extracted_info.student_name || 'Not provided'}</p>
                                     <p><strong>📝 Total Questions:</strong> ${result.extracted_info.total_questions}</p>
                                     <p><strong>📸 Images Processed:</strong> ${result.extracted_info.images_processed || 1}</p>
-                                    ${paperInfoHtml ? `<hr style="margin: 10px 0; border: 1px solid #ddd;"><h4>📄 Paper Information:</h4>${paperInfoHtml}` : ''}
+                                    ${paperInfoHtml ? `<hr style="margin: 10px 0; border: 1px solid var(--border);"><h4>📄 Paper Information:</h4>${paperInfoHtml}` : ''}
                                 </div>
                                 <div class="confirmation-buttons">
                                     <button onclick="confirmSubmission(${JSON.stringify(result).replace(/"/g, '&quot;')})" class="primary">✅ Confirm & Submit</button>
@@ -1559,6 +1555,8 @@
                     `;
                     document.getElementById('studentForm').reset();
                     capturedStudentSheetBlob = null;
+                    selectedImages = [];
+                    updateImagePreview();
                     // Reset student preview
                     const imgPrev = document.getElementById('studentCapturedPreview');
                     if (imgPrev) { imgPrev.style.display = 'none'; imgPrev.src = ''; }
@@ -1659,11 +1657,11 @@
                         let submissionsHtml = '';
                         confirmResult.submissions.forEach(sub => {
                             submissionsHtml += `
-                                <div style="border: 1px solid #28a745; padding: 12px; margin: 8px 0; border-radius: 6px; background: linear-gradient(135deg, #d4edda 0%, #f8fff9 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                    <strong style="color: #155724; font-size: 15px;">🎓 Roll ${sub.roll_number}:</strong> 
-                                    <span style="color: #333; font-weight: 500;">ID ${sub.submission_id}</span>
+                                <div style="border: 1px solid var(--success); padding: 12px; margin: 8px 0; border-radius: 6px; background: linear-gradient(135deg, rgba(70,210,111,0.1) 0%, rgba(70,210,111,0.05) 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <strong style="color: var(--success); font-size: 15px;">🎓 Roll ${sub.roll_number}:</strong> 
+                                    <span style="color: var(--text); font-weight: 500;">ID ${sub.submission_id}</span>
                                     <br>
-                                    <small style="color: #666; margin-top: 4px; display: block;">📝 ${sub.answers_count} answers • 📸 ${sub.images_count} images</small>
+                                    <small style="color: var(--muted); margin-top: 4px; display: block;">📝 ${sub.answers_count} answers • 📸 ${sub.images_count} images</small>
                                 </div>
                             `;
                         });
@@ -1781,15 +1779,15 @@
             let html = '';
             data.forEach(result => {
                 const percentage = Number(result.percentage) || 0;
-                const gradeColor = percentage >= 90 ? '#28a745' : 
-                                 percentage >= 80 ? '#17a2b8' : 
-                                 percentage >= 70 ? '#ffc107' : 
-                                 percentage >= 60 ? '#fd7e14' : '#dc3545';
+                const gradeColor = percentage >= 90 ? 'var(--success)' : 
+                                 percentage >= 80 ? 'var(--primary)' : 
+                                 percentage >= 70 ? 'var(--warning)' : 
+                                 percentage >= 60 ? 'var(--danger)' : 'var(--danger)'; // Dark theme colors
                 
                 const grade = percentage >= 90 ? 'A' : 
-                             percentage >= 80 ? 'B' : 
-                             percentage >= 70 ? 'C' : 
-                             percentage >= 60 ? 'D' : 'F';
+                              percentage >= 80 ? 'B' : 
+                              percentage >= 70 ? 'C' : 
+                              percentage >= 60 ? 'D' : 'F';
                 
                 html += `
                     <div class="result-card">
@@ -1839,9 +1837,9 @@
                                    'question-not-answered';
                 
                 const statusText = q.status === 'correct' ? '✅' : 
-                                  q.status === 'partial' ? '🟡' :
-                                  q.status === 'incorrect' ? '❌' : 
-                                  '❓';
+                                   q.status === 'partial' ? '🟡' :
+                                   q.status === 'incorrect' ? '❌' : 
+                                   '❓';
                 
                 questionsHtml += `
                     <div class="question-item ${statusClass}">
@@ -1850,7 +1848,7 @@
                             <strong>Selected:</strong> ${q.selected_options ? q.selected_options.join(', ') : (q.selected_option || 'None')}<br>
                             <strong>Correct:</strong> ${q.correct_options ? q.correct_options.join(', ') : q.correct_option}<br>
                             <strong>Marks:</strong> ${q.marks || 0}/${q.total_marks || 1}
-                            ${q.marking_explanation ? `<br><em style="color: #666;">${q.marking_explanation}</em>` : ''}
+                            ${q.marking_explanation ? `<br><em style="color: var(--bg);">${q.marking_explanation}</em>` : ''}
                         </div>
                     </div>
                 `;
@@ -1858,10 +1856,10 @@
             questionsHtml += '</div>';
             
             const percentage = Number(statistics.percentage) || 0;
-            const gradeColor = percentage >= 90 ? '#28a745' : 
-                             percentage >= 80 ? '#17a2b8' : 
-                             percentage >= 70 ? '#ffc107' : 
-                             percentage >= 60 ? '#fd7e14' : '#dc3545';
+            const gradeColor = percentage >= 90 ? 'var(--success)' : 
+                                 percentage >= 80 ? 'var(--primary)' : 
+                                 percentage >= 70 ? 'var(--warning)' : 
+                                 percentage >= 60 ? 'var(--danger)' : 'var(--danger)';
             
             const modal = document.createElement('div');
             // Change modal background to fit dark theme
@@ -1870,15 +1868,15 @@
                 <div style="background: var(--bg-soft); padding: 25px; border-radius: 8px; max-width: 900px; max-height: 90vh; overflow-y: auto; width: 100%;">
                     <h3>📊 Detailed Results: ${submission.paper_name}</h3>
                     <div style="background: var(--card); padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-    <p><strong>🎓 Student:</strong> ${submission.roll_number} - ${submission.student_name || 'N/A'}</p>
-    <p><strong>📈 Score:</strong> ${statistics.correct}/${statistics.total_questions} questions <span style="color: ${gradeColor}; font-weight: bold;">(${statistics.percentage}%)</span></p>
-    <p><strong>🎯 Marks:</strong> ${submission.total_marks} marks earned</p>
-    <p><strong>📋 Breakdown:</strong> 
-        <span style="color: #28a745;">✅ ${statistics.correct} Correct</span> | 
-        <span style="color: #dc3545;">❌ ${statistics.incorrect} Incorrect</span> | 
-        <span style="color: #ffc107;">❓ ${statistics.not_answered} Not Answered</span>
-    </p>
-</div>
+                        <p><strong>🎓 Student:</strong> ${submission.roll_number} - ${submission.student_name || 'N/A'}</p>
+                        <p><strong>📈 Score:</strong> ${statistics.correct}/${statistics.total_questions} questions <span style="color: ${gradeColor}; font-weight: bold;">(${statistics.percentage}%)</span></p>
+                        <p><strong>🎯 Marks:</strong> ${submission.total_marks} marks earned</p>
+                        <p><strong>📋 Breakdown:</strong> 
+                            <span style="color: var(--success);">✅ ${statistics.correct} Correct</span> | 
+                            <span style="color: var(--danger);">❌ ${statistics.incorrect} Incorrect</span> | 
+                            <span style="color: var(--warning);">❓ ${statistics.not_answered} Not Answered</span>
+                        </p>
+                    </div>
                     
                     <h4>📝 Question-wise Results:</h4>
                     ${questionsHtml}
@@ -1919,22 +1917,22 @@
                 <div class="analytics-card">
                     <h4>📄 Total Papers</h4>
                     <div class="stat-number">${overview.total_papers}</div>
-                    <p style="color: #666; margin: 0;">Question papers created</p>
+                    <p style="color: var(--muted); margin: 0;">Question papers created</p>
                 </div>
                 <div class="analytics-card">
                     <h4>📝 Total Submissions</h4>
                     <div class="stat-number">${overview.total_submissions}</div>
-                    <p style="color: #666; margin: 0;">Answer sheets submitted</p>
+                    <p style="color: var(--muted); margin: 0;">Answer sheets submitted</p>
                 </div>
                 <div class="analytics-card">
                     <h4>🎓 Unique Students</h4>
                     <div class="stat-number">${overview.unique_students}</div>
-                    <p style="color: #666; margin: 0;">Students participated</p>
+                    <p style="color: var(--muted); margin: 0;">Students participated</p>
                 </div>
                 <div class="analytics-card">
                     <h4>📊 Average Performance</h4>
                     <div class="stat-number">${overview.average_performance}%</div>
-                    <p style="color: #666; margin: 0;">Overall class average</p>
+                    <p style="color: var(--muted); margin: 0;">Overall class average</p>
                 </div>
             `;
             
@@ -1961,8 +1959,8 @@
                     html += `
                         <div class="grade-bar">
                             <div class="grade-label">${grade.grade}</div>
-                            <div style="flex: 1; background: #e9ecef; height: 24px; border-radius: 12px; margin: 0 10px; overflow: hidden;">
-                                <div style="background: #007bff; height: 100%; width: ${percentage}%; border-radius: 12px; transition: width 0.3s ease;"></div>
+                            <div style="flex: 1; background: var(--bg); height: 24px; border-radius: 12px; margin: 0 10px; overflow: hidden; border: 1px solid var(--border);">
+                                <div style="background: var(--primary); height: 100%; width: ${percentage}%; border-radius: 12px; transition: width 0.3s ease;"></div>
                             </div>
                             <div class="grade-count">${grade.count} (${percentage.toFixed(1)}%)</div>
                         </div>
@@ -2001,15 +1999,15 @@
             data.submissions.slice(0, 10).forEach((submission, index) => {
                 const percentage = parseFloat(submission.percentage) || 0;
                 const grade = percentage >= 90 ? 'A+' : 
-                             percentage >= 80 ? 'A' : 
-                             percentage >= 70 ? 'B+' : 
-                             percentage >= 60 ? 'B' : 
-                             percentage >= 50 ? 'C' : 'F';
+                              percentage >= 80 ? 'A' : 
+                              percentage >= 70 ? 'B+' : 
+                              percentage >= 60 ? 'B' : 
+                              percentage >= 50 ? 'C' : 'F';
                 
-                const gradeColor = percentage >= 90 ? '#28a745' : 
-                                  percentage >= 80 ? '#17a2b8' : 
-                                  percentage >= 70 ? '#ffc107' : 
-                                  percentage >= 60 ? '#fd7e14' : '#dc3545';
+                const gradeColor = percentage >= 90 ? 'var(--success)' : 
+                                     percentage >= 80 ? 'var(--primary)' : 
+                                     percentage >= 70 ? 'var(--warning)' : 
+                                     percentage >= 60 ? 'var(--danger)' : 'var(--danger)';
 
                 html += `
                     <tr style="border-bottom: 1px solid var(--border); ${index % 2 === 0 ? 'background: var(--bg-soft);' : ''}">
@@ -2056,10 +2054,10 @@
                 return;
             }
             
-            let html = '<div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">';
+            let html = '<div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow);">';
             html += `
                 <thead>
-                    <tr style="background: #007bff; color: white;">
+                    <tr style="background: var(--primary); color: white;">
                         <th style="padding: 15px; text-align: left;">🎓 Roll Number</th>
                         <th style="padding: 15px; text-align: left;">👤 Student Name</th>
                         <th style="padding: 15px; text-align: left;">📄 Paper</th>
@@ -2074,22 +2072,22 @@
             
             data.forEach((submission, index) => {
                 const percentage = Number(submission.percentage) || 0;
-                const gradeColor = percentage >= 90 ? '#28a745' : 
-                                 percentage >= 80 ? '#17a2b8' : 
-                                 percentage >= 70 ? '#ffc107' : 
-                                 percentage >= 60 ? '#fd7e14' : '#dc3545';
+                const gradeColor = percentage >= 90 ? 'var(--success)' : 
+                                 percentage >= 80 ? 'var(--primary)' : 
+                                 percentage >= 70 ? 'var(--warning)' : 
+                                 percentage >= 60 ? 'var(--danger)' : 'var(--danger)';
                 
-                const rowBg = index % 2 === 0 ? '#f8f9fa' : 'white';
+                const rowBg = index % 2 === 0 ? 'var(--bg-soft)' : 'var(--card)';
                 
                 html += `
-                    <tr style="background: ${rowBg};">
-                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6;"><strong>${submission.roll_number}</strong></td>
-                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${submission.student_name || 'N/A'}</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${submission.paper_name}</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6; text-align: center;"><strong>${submission.correct_answers || 0}/${submission.total_questions}</strong></td>
-                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6; text-align: center; color: ${gradeColor}; font-weight: bold;">${percentage.toFixed(1)}%</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6; text-align: center;">${new Date(submission.submitted_at).toLocaleDateString()}</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #dee2e6; text-align: center;">
+                    <tr style="background: ${rowBg}; border-bottom: 1px solid var(--border);">
+                        <td style="padding: 12px; border-bottom: 1px solid var(--border);"><strong>${submission.roll_number}</strong></td>
+                        <td style="padding: 12px; border-bottom: 1px solid var(--border);">${submission.student_name || 'N/A'}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid var(--border);">${submission.paper_name}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid var(--border); text-align: center;"><strong>${submission.correct_answers || 0}/${submission.total_questions}</strong></td>
+                        <td style="padding: 12px; border-bottom: 1px solid var(--border); text-align: center; color: ${gradeColor}; font-weight: bold;">${percentage.toFixed(1)}%</td>
+                        <td style="padding: 12px; border-bottom: 1px solid var(--border); text-align: center;">${new Date(submission.submitted_at).toLocaleDateString()}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid var(--border); text-align: center;">
                             <button onclick="viewDetailedResults(${submission.id})" class="secondary" style="padding: 6px 12px; font-size: 12px;">📊 Details</button>
                         </td>
                     </tr>
@@ -2103,7 +2101,7 @@
             const avgPercentage = data.reduce((sum, s) => sum + (Number(s.percentage) || 0), 0) / totalSubmissions;
             
             html += `
-                <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 4px;">
+                <div style="margin-top: 15px; padding: 15px; background: var(--card); border-radius: 4px; border: 1px solid var(--border);">
                     <strong>📊 Summary:</strong> ${totalSubmissions} total submissions • Average: ${avgPercentage.toFixed(1)}%
                 </div>
             `;
@@ -2111,5 +2109,6 @@
             container.innerHTML = html;
         }
     </script>
+    <script>window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}</script><script id="zsiqscript" src="https://salesiq.zohopublic.in/widget?wc=siqbfe8b44ce1a221e3097707e0c58b10f912318f424de5f649f6728bec7994b72e" defer></script>
 </body>
 </html>
